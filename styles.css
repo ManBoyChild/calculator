@@ -27,8 +27,9 @@
     background: #fefae0;
     border: 1px solid black;
     border-radius: 10px;
-    font-size: 3rem;
+    font-size: 8rem;
     grid-column:  1/5;
+    text-align: right;
 }
 
 .function {
