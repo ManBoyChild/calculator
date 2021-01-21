@@ -1,3 +1,9 @@
+// GLOBAL VARIABLES
+let displayInput = "";
+let prev = 0;
+let curr = 0;
+let chosenOperator = "";
+
 //CALCULATOR FUNCTIONS
 const add = (prev, curr) => prev + curr;
 const subtract = (prev, curr) => prev - curr;
@@ -11,16 +17,14 @@ const operate = (chosenOperator, prev, curr) => {
         result = subtract(prev, curr);
     } else if (chosenOperator == "multiply") {
         result = multiply(prev, curr);
+    } else if(chosenOperator === "divide" && curr === 0) {
+        alert("You are unable to divide by zero under the contrains of this calculator. Please select a differnt input");
+        curr = 0;
     } else if (chosenOperator == "divide") {
        result = divide(prev, curr);
     }
     return result;
 }
-
-let displayInput = "";
-let prev = 0;
-let curr = 0;
-let chosenOperator = "";
 
 //OPERATOR BUTTON FUNCTIONS
 const addBtn = document.querySelector(".add");
@@ -35,9 +39,11 @@ divideBtn.addEventListener("click", updateOperator);
 
 function updateOperator (e) {
     chosenOperator = e.target.classList[0];
+    displayInput = "";
+    console.log(displayInput, prev, chosenOperator, curr);
     return chosenOperator;
+    
 }
-
 
 //NUMBER BUTTON FUNCTIONALITY
 const zero = document.querySelector(".zero")
@@ -68,87 +74,102 @@ function updateDisplay() {
     let display = document.getElementById("display");
     switch(parseInt(number)) {
         case 0:
-            displayInput = "0";
+            displayInput += "0";
             if (prev === 0 || chosenOperator === "") {
-                prev = 0;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 0;
+                curr = parseFloat(displayInput);
             }
             break;
         case 1:
-            displayInput = "1";
+            displayInput += "1";
             if (prev === 0 || chosenOperator === "") {
-                prev = 1;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 1;
+                curr = parseFloat(displayInput);
             }
             break;
         case 2:
-            displayInput = "2";
+            displayInput += "2";
             if (prev === 0 || chosenOperator === "") {
-                prev = 2;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 2;
+                curr = parseFloat(displayInput);
             }
             break;
         case 3:
-            displayInput = "3";
+            displayInput += "3";
             if (prev === 0 || chosenOperator === "") {
-                prev = 3;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 3;
+                curr = parseFloat(displayInput);
             }
             break;
         case 4:
-            displayInput = "4";
+            displayInput += "4";
             if (prev === 0 || chosenOperator === "") {
-                prev = 4;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 4;
+                curr = parseFloat(displayInput);
             }
             break;
         case 5:
-            displayInput = "5";
+            displayInput += "5";
             if (prev === 0 || chosenOperator === "") {
-                prev = 5;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 5;
+                curr = parseFloat(displayInput);
             }
             break;
         case 6:
-            displayInput = "6";
+            displayInput += "6";
             if (prev === 0 || chosenOperator === "") {
-                prev = 6;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 6;
+                curr = parseFloat(displayInput);
             }
             break;
         case 7:
-            displayInput = "7";
+            displayInput += "7";
             if (prev === 0 || chosenOperator === "") {
-                prev = 7;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 7;
+                curr = parseFloat(displayInput);
             }
             break;
         case 8:
-            displayInput = "8";
+            displayInput += "8";
             if (prev === 0 || chosenOperator === "") {
-                prev = 8;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 8;
+                curr = parseFloat(displayInput);
             }
             break;
         case 9:
-            displayInput = "9";
+            displayInput += "9";
             if (prev === 0 || chosenOperator === "") {
-                prev = 9;
+                prev = parseFloat(displayInput);
             } else {
-                curr = 9;
+                curr = parseFloat(displayInput);
             }
     }
-    console.log(prev, chosenOperator, curr);
+    console.log(displayInput, prev, chosenOperator, curr);
     return display.innerText = `${displayInput}`; 
+}
+
+//DECIMAL BUTTON FUNCTION AND LOGIC
+const decimalBtn = document.querySelector(".decimal");
+decimalBtn.addEventListener("click", decimalNumber);
+
+function decimalNumber() {
+    while(!displayInput.includes(".")) {
+        displayInput += ".";
+        if (prev === 0 || chosenOperator === "") {
+            prev = parseFloat(displayInput);
+        } else {
+            curr = parseFloat(displayInput);
+        }
+    }
 }
 
 //EQUALS BUTTON FUNCTION AND LOGIC
@@ -156,21 +177,29 @@ const equals = document.querySelector(".equals");
 equals.addEventListener("click", equalsOperation);
 
 function equalsOperation() {
-    let equalsValue = operate(chosenOperator, prev, curr);
+    let equalsValue = operate(chosenOperator, prev, curr)
     console.log(equalsValue);
-    display.innerText = `${equalsValue}`;
-    prev = equalsValue;
-    curr = 0;
-    chosenOperator = "";
-    console.log(prev, chosenOperator, curr);
+    // if (equalsValue.includes(".") ) {
+    //     equalsValue.toPrecision(6)
+    // }
+    if (curr >= 1) {
+        display.innerText = `${equalsValue}`;
+        prev = equalsValue;
+        curr = 0;
+        chosenOperator = "";
+    }
+    console.log(displayInput, prev, chosenOperator, curr);
 }
 
+// CLEAR BUTTON FUNCTION AND LOGIC
 const clear = document.querySelector(".clear");
 clear.addEventListener("click", clearHistory);
 
 function clearHistory () {
     display.innerText = "0";
+    displayInput = "";
     prev = 0;
     curr = 0;
     chosenOperator = "";
+    console.log(displayInput, prev, chosenOperator, curr);
 }
