@@ -1,21 +1,20 @@
 //CALCULATOR FUNCTIONS
-//const add = (prev, curr) => prev + curr;
-function add(prev, curr) {
-    return prev + curr;
-}
+const add = (prev, curr) => prev + curr;
 const subtract = (prev, curr) => prev - curr;
 const multiply = (prev, curr) => prev * curr;
-const divide = (prev, curr) => prev * curr;
+const divide = (prev, curr) => prev / curr;
 const operate = (chosenOperator, prev, curr) => {
+    let result = 0;
     if (chosenOperator == "add") {
-        add(prev, curr);
+        result = add(prev, curr);
     } else if (chosenOperator == "subtract") {
-        subtract(prev, curr);
+        result = subtract(prev, curr);
     } else if (chosenOperator == "multiply") {
-        multiply(prev, curr);
+        result = multiply(prev, curr);
     } else if (chosenOperator == "divide") {
-        divide(prev, curr);
+       result = divide(prev, curr);
     }
+    return result;
 }
 
 let displayInput = "";
@@ -41,6 +40,7 @@ function updateOperator (e) {
 
 
 //NUMBER BUTTON FUNCTIONALITY
+const zero = document.querySelector(".zero")
 const one = document.querySelector(".one");
 const two = document.querySelector(".two");
 const three = document.querySelector(".three");
@@ -51,6 +51,7 @@ const seven = document.querySelector(".seven");
 const eight = document.querySelector(".eight");
 const nine = document.querySelector(".nine");
 
+zero.addEventListener("click", updateDisplay);
 one.addEventListener("click", updateDisplay);
 two.addEventListener("click", updateDisplay);
 three.addEventListener("click", updateDisplay);
@@ -66,6 +67,14 @@ function updateDisplay() {
     let number = this.innerHTML;
     let display = document.getElementById("display");
     switch(parseInt(number)) {
+        case 0:
+            displayInput = "0";
+            if (prev === 0 || chosenOperator === "") {
+                prev = 0;
+            } else {
+                curr = 0;
+            }
+            break;
         case 1:
             displayInput = "1";
             if (prev === 0 || chosenOperator === "") {
@@ -142,14 +151,26 @@ function updateDisplay() {
     return display.innerText = `${displayInput}`; 
 }
 
+//EQUALS BUTTON FUNCTION AND LOGIC
 const equals = document.querySelector(".equals");
 equals.addEventListener("click", equalsOperation);
 
 function equalsOperation() {
     let equalsValue = operate(chosenOperator, prev, curr);
     console.log(equalsValue);
-    // display.innerText = `${equalsValue}`;
-    // prev = parseInt(equalsValue);
-    // curr = 0;
+    display.innerText = `${equalsValue}`;
+    prev = equalsValue;
+    curr = 0;
+    chosenOperator = "";
+    console.log(prev, chosenOperator, curr);
+}
 
+const clear = document.querySelector(".clear");
+clear.addEventListener("click", clearHistory);
+
+function clearHistory () {
+    display.innerText = "0";
+    prev = 0;
+    curr = 0;
+    chosenOperator = "";
 }
