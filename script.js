@@ -40,7 +40,6 @@ divideBtn.addEventListener("click", updateOperator);
 function updateOperator (e) {
     chosenOperator = e.target.classList[0];
     displayInput = "";
-    console.log(displayInput, prev, chosenOperator, curr);
     return chosenOperator;
     
 }
@@ -162,6 +161,7 @@ const decimalBtn = document.querySelector(".decimal");
 decimalBtn.addEventListener("click", decimalNumber);
 
 function decimalNumber() {
+    let display = document.getElementById("display");
     while(!displayInput.includes(".")) {
         displayInput += ".";
         if (prev === 0 || chosenOperator === "") {
@@ -169,6 +169,7 @@ function decimalNumber() {
         } else {
             curr = parseFloat(displayInput);
         }
+        return display.innerText = `${displayInput}`;
     }
 }
 
@@ -178,11 +179,13 @@ equals.addEventListener("click", equalsOperation);
 
 function equalsOperation() {
     let equalsValue = operate(chosenOperator, prev, curr)
-    console.log(equalsValue);
-    // if (equalsValue.includes(".") ) {
-    //     equalsValue.toPrecision(6)
-    // }
+    if (equalsValue > 99999999999) {
+        equalsValue = equalsValue.toExponential(2);
+    } else {
+        equalsValue = parseFloat((equalsValue).toPrecision(10));
+    }
     if (curr >= 1) {
+        displayInput = "";
         display.innerText = `${equalsValue}`;
         prev = equalsValue;
         curr = 0;
@@ -194,7 +197,6 @@ function equalsOperation() {
 // CLEAR BUTTON FUNCTION AND LOGIC
 const clear = document.querySelector(".clear");
 clear.addEventListener("click", clearHistory);
-
 function clearHistory () {
     display.innerText = "0";
     displayInput = "";
