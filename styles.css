@@ -52,7 +52,6 @@
     font-size: 8rem;
     grid-column:  1/5;
     overflow: hidden;
-    text-overflow: clip;
     text-align: right;
 }
 
