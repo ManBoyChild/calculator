@@ -19,11 +19,6 @@
     outline: none;
 }
 
-.clear {
-    grid-row: 3/5;
-    grid-column: 4/5;
-}
-
 .decimal {
     grid-row: 6/7;
     grid-column: 3/4;
