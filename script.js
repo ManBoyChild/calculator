@@ -1,4 +1,4 @@
-// SETTING INTIAL VALUES
+//INTIAL VARIABLES
 let displayInput = "";
 let prev = 0;
 let curr = 0;
@@ -36,7 +36,46 @@ function updateOperator (e) {
     chosenOperator = e.target.classList[0];
     displayInput = "";
     return chosenOperator;
-    
+}
+
+//OPPERATOR AND EQUALS KEYBOARD FUNCTION
+document.addEventListener("keydown", operatorKeyboad);
+
+function operatorKeyboad(e) {
+    let keyboardCode = e.keyCode;
+    switch(keyboardCode) {
+        case 107:
+            chosenOperator = "add";
+            displayInput = "";
+            break;
+        case 187:
+            if(e.shiftKey) {
+                chosenOperator = "add";
+                displayInput = "";
+            }
+            break;
+        case 109:
+        case 189:
+            chosenOperator = "subtract";
+            displayInput = "";
+            break;
+        case 106:
+            chosenOperator = "multiply";
+            displayInput = "";
+            break;
+        case 56:
+            if(e.shiftKey) {
+                chosenOperator = "multiply";
+                displayInput = "";
+            }
+            break;
+        case 111:
+        case 191:
+            chosenOperator = "divide";
+            displayInput = "";
+            break;
+    }
+    return chosenOperator;
 }
 
 //NUMBER BUTTON EVENT LISTENERS
@@ -45,7 +84,7 @@ numberBtn.forEach(numberBtn => {
     numberBtn.addEventListener("click", updateDisplay);
 });
 
-// DISPLAY AND NUMBER VALUE LOGIC
+//DISPLAY AND NUMBER VALUE LOGIC
 function updateDisplay() {
     let number = this.innerHTML;
     let display = document.getElementById("display");
@@ -130,16 +169,15 @@ function updateDisplay() {
                 curr = parseFloat(displayInput);
             }
     }
-    console.log(displayInput.length, prev, chosenOperator, curr);
+    console.log(displayInput, prev, chosenOperator, curr);
     return display.innerText = `${displayInput}`; 
 }
 
-//ADDING KEYBOARD FUNCTIONALITY
+//ADDING NUMBER AND DECIMAL KEYBOARD FUNCTIONALITY
 document.addEventListener("keydown", keyboardFunction);
 
 function keyboardFunction(e) {
     let keyboardCode = e.keyCode;
-    console.log(keyboardCode, e.shiftKey);
     let display = document.getElementById("display");
     switch(keyboardCode) {
         case 110:
@@ -284,9 +322,23 @@ function equalsOperation() {
     console.log(displayInput, prev, chosenOperator, curr);
 }
 
-// CLEAR BUTTON FUNCTION AND LOGIC
+//EQUALS BUTTON KEYBOAD SUPPORT
+document.addEventListener("keydown", equalsKeyboard);
+
+function equalsKeyboard(e){
+    const keyboardCode = e.keyCode
+    switch(keyboardCode) {
+        case 13:
+        case 187:
+            equalsOperation();
+            break;
+    }
+}
+
+//CLEAR BUTTON FUNCTION AND LOGIC
 const clear = document.querySelector(".clear");
 clear.addEventListener("click", clearHistory);
+
 function clearHistory () {
     display.innerText = "0";
     displayInput = "";
@@ -294,4 +346,31 @@ function clearHistory () {
     curr = 0;
     chosenOperator = "";
     console.log(displayInput, prev, chosenOperator, curr);
+}
+
+//CORRECTION KEY
+const correct = document.querySelector(".correct");
+correct.addEventListener("click", backSpace);
+
+function backSpace() {
+    const value = document.getElementById("display");
+    const display = document.getElementById("display");
+    displayInput = value.innerText.substring(0, value.innerText.length - 1);
+    if (displayInput.length === 0) {
+        displayInput = "";
+    }
+    return display.innerText = `${displayInput}`;
+}
+
+//CORRECTION KEYBOARD SUPPORT
+document.addEventListener("keydown", backSpaceKeyboard);
+
+function backSpaceKeyboard(e) {
+    let keyboardCode = e.keyCode;
+    switch(keyboardCode) {
+        case 8:
+        case 46:
+            backSpace();
+            break;
+    }
 }
