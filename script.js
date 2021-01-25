@@ -1,5 +1,6 @@
 //INTIAL VARIABLES
-let displayInput = "";
+const display = document.getElementById("display");
+const container = document.querySelector(".container");
 let prev = 0;
 let curr = 0;
 let chosenOperator = "";
@@ -33,8 +34,15 @@ operatorFunctions.forEach(operator => {
 });
 
 function updateOperator (e) {
-    chosenOperator = e.target.classList[0];
-    displayInput = "";
+    if (prev !== 0 && chosenOperator !== "" && curr !== 0) {
+        equalsOperation();
+        chosenOperator = e.target.classList[0];
+        display.innerText = "0";
+    } else {
+        chosenOperator = e.target.classList[0];
+        display.innerText = "0";
+    }
+    console.log(display.innerText, prev, chosenOperator, curr);
     return chosenOperator;
 }
 
@@ -46,35 +54,32 @@ function operatorKeyboad(e) {
     switch(keyboardCode) {
         case 107:
             chosenOperator = "add";
-            displayInput = "";
             break;
         case 187:
             if(e.shiftKey) {
                 chosenOperator = "add";
-                displayInput = "";
             }
             break;
         case 109:
         case 189:
             chosenOperator = "subtract";
-            displayInput = "";
             break;
         case 106:
             chosenOperator = "multiply";
-            displayInput = "";
             break;
         case 56:
             if(e.shiftKey) {
                 chosenOperator = "multiply";
-                displayInput = "";
             }
             break;
         case 111:
         case 191:
             chosenOperator = "divide";
-            displayInput = "";
             break;
+        default:
+            display.innerText = display.innerText;
     }
+    display.innerText = "0";
     return chosenOperator;
 }
 
@@ -85,219 +90,174 @@ numberBtn.forEach(numberBtn => {
 });
 
 //DISPLAY AND NUMBER VALUE LOGIC
-function updateDisplay() {
-    let number = this.innerHTML;
-    let display = document.getElementById("display");
-    switch(parseInt(number)) {
-        case 0:
-            displayInput += "0";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 1:
-            displayInput += "1";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 2:
-            displayInput += "2";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 3:
-            displayInput += "3";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 4:
-            displayInput += "4";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 5:
-            displayInput += "5";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 6:
-            displayInput += "6";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 7:
-            displayInput += "7";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 8:
-            displayInput += "8";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
-            break;
-        case 9:
-            displayInput += "9";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
-            } else {
-                curr = parseFloat(displayInput);
-            }
+function updateDisplay(e) {
+    if (display.innerText === 0) {
+        display.innerText = "0";
+    } else if (prev === 0 || chosenOperator === "") {
+        display.innerText = display.innerText.replace(/^0+/, '');
+        display.innerText += e.target.innerText;
+        prev = parseFloat(display.innerText);
+    } else {
+        display.innerText = display.innerText.replace(/^0+/, '');
+        display.innerText += e.target.innerText;
+        curr = parseFloat(display.innerText);
     }
-    console.log(displayInput, prev, chosenOperator, curr);
-    return display.innerText = `${displayInput}`; 
+    console.log(display.innerText, prev, chosenOperator, curr);
 }
 
 //ADDING NUMBER AND DECIMAL KEYBOARD FUNCTIONALITY
 document.addEventListener("keydown", keyboardFunction);
 
 function keyboardFunction(e) {
-    let keyboardCode = e.keyCode;
-    let display = document.getElementById("display");
-    switch(keyboardCode) {
+    switch(e.keyCode) {
         case 110:
         case 190:
             decimalNumber();
             break;
         case 48:
         case 96:
-            displayInput += "0";
-            if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+            if (display.innerText === 0) {
+                display.innerText = "0";
+            } else if (prev === 0 || chosenOperator === "") {
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText = "0";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "0";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 49:
         case 97:
-            displayInput += "1";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "1";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "1";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 50:
         case 98:
-            displayInput += "2";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "2";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "2";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 51:
         case 99:
-            displayInput += "3";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "3";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "3";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 52:
         case 100:
-            displayInput += "4";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "4";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "4";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 53:
         case 101:
-            displayInput += "5";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "5";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "5";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 54:
         case 102:
-            displayInput += "6";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "6";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "6";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 55:
         case 103:
-            displayInput += "7";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "7";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "7";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 56:
         case 104:
-            displayInput += "8";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "8";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "8";
+                curr = parseFloat(display.innerText);
             }
             break;
         case 57:
         case 105:
-            displayInput += "9";
             if (prev === 0 || chosenOperator === "") {
-                prev = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "9";
+                prev = parseFloat(display.innerText);
             } else {
-                curr = parseFloat(displayInput);
+                display.innerText = display.innerText.replace(/^0+/, '');
+                display.innerText += "9";
+                curr = parseFloat(display.innerText);
             }
             break;
         default:
             break;
     }
-    console.log(displayInput.length, prev, chosenOperator, curr);
-    return display.innerText = `${displayInput}`; 
+    console.log(display.innerText, prev, chosenOperator, curr);
+    return display;
 }
 
 //DECIMAL BUTTON FUNCTION AND LOGIC
 const decimalBtn = document.querySelector(".decimal");
 decimalBtn.addEventListener("click", decimalNumber);
 
-function decimalNumber() {
-    let display = document.getElementById("display");
-    while(!displayInput.includes(".")) {
-        if(displayInput === "") {
+function decimalNumber(e) {
+    while(!display.innerText.includes(".")) {
+        if(display.innerText === "") {
             displayInput += 0;
         }
-        displayInput += ".";
+        display.innerText += e.target.innerText;
         if (prev === 0 || chosenOperator === "") {
-            prev = parseFloat(displayInput);
+            prev = parseFloat(display);
         } else {
-            curr = parseFloat(displayInput);
+            curr = parseFloat(display);
         }
-        return display.innerText = `${displayInput}`;
     }
 }
 
@@ -306,20 +266,37 @@ const equals = document.querySelector(".equals");
 equals.addEventListener("click", equalsOperation);
 
 function equalsOperation() {
-    let equalsValue = operate(chosenOperator, prev, curr)
-    if (equalsValue > 99999999999) {
-        equalsValue = equalsValue.toExponential(2);
+    let equalsValue = 0;
+    if (prev !== 0 && chosenOperator !== "" && curr === 0) {
+        if (chosenOperator === "divide") {
+            curr = 0;
+        } else {
+            curr = prev;
+        }
+        equalsValue = operate(chosenOperator, prev, curr);
+        if (equalsValue > 99999999999) {
+            equalsValue = equalsValue.toExponential(2);
+        } else {
+            equalsValue = parseFloat((equalsValue).toPrecision(12));
+        }
     } else {
-        equalsValue = parseFloat((equalsValue).toPrecision(12));
+        equalsValue = operate(chosenOperator, prev, curr);
+        if (equalsValue > 99999999999) {
+            equalsValue = equalsValue.toExponential(2);
+        } else {
+            equalsValue = parseFloat((equalsValue).toPrecision(12));
+        }
     }
-    if (curr >= 1) {
-        displayInput = "";
-        display.innerText = `${equalsValue}`;
+
+    display.innerText = `${equalsValue}`;
+
+    if (Number.isInteger(parseInt(curr))) {
         prev = equalsValue;
         curr = 0;
         chosenOperator = "";
     }
-    console.log(displayInput, prev, chosenOperator, curr);
+    console.log(display.innerText, prev, chosenOperator, curr);
+    return equalsValue;
 }
 
 //EQUALS BUTTON KEYBOAD SUPPORT
@@ -341,11 +318,10 @@ clear.addEventListener("click", clearHistory);
 
 function clearHistory () {
     display.innerText = "0";
-    displayInput = "";
     prev = 0;
     curr = 0;
     chosenOperator = "";
-    console.log(displayInput, prev, chosenOperator, curr);
+    console.log(display.innerText, prev, chosenOperator, curr);
 }
 
 //CORRECTION KEY
@@ -353,13 +329,10 @@ const correct = document.querySelector(".correct");
 correct.addEventListener("click", backSpace);
 
 function backSpace() {
-    const value = document.getElementById("display");
-    const display = document.getElementById("display");
-    displayInput = value.innerText.substring(0, value.innerText.length - 1);
-    if (displayInput.length === 0) {
-        displayInput = "";
+    display.innerText = display.innerText.substring(0, display.innerText.length - 1);
+    if (display.innerText.length === 0) {
+        display.innerText = "0";
     }
-    return display.innerText = `${displayInput}`;
 }
 
 //CORRECTION KEYBOARD SUPPORT
