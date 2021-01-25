@@ -274,14 +274,14 @@ function equalsOperation() {
             curr = prev;
         }
         equalsValue = operate(chosenOperator, prev, curr);
-        if (equalsValue > 99999999999) {
+        if (equalsValue > 99999999999 || equalsValue < -9999999999) {
             equalsValue = equalsValue.toExponential(2);
         } else {
             equalsValue = parseFloat((equalsValue).toPrecision(12));
         }
     } else {
         equalsValue = operate(chosenOperator, prev, curr);
-        if (equalsValue > 99999999999) {
+        if (equalsValue > 99999999999 || equalsValue < -9999999999) {
             equalsValue = equalsValue.toExponential(2);
         } else {
             equalsValue = parseFloat((equalsValue).toPrecision(12));
