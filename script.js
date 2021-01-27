@@ -51,35 +51,22 @@ document.addEventListener("keydown", operatorKeyboad);
 
 function operatorKeyboad(e) {
     let keyboardCode = e.keyCode;
-    switch(keyboardCode) {
-        case 107:
-            chosenOperator = "add";
-            break;
-        case 187:
-            if(e.shiftKey) {
-                chosenOperator = "add";
-            }
-            break;
-        case 109:
-        case 189:
-            chosenOperator = "subtract";
-            break;
-        case 106:
-            chosenOperator = "multiply";
-            break;
-        case 56:
-            if(e.shiftKey) {
-                chosenOperator = "multiply";
-            }
-            break;
-        case 111:
-        case 191:
-            chosenOperator = "divide";
-            break;
-        default:
-            display.innerText = display.innerText;
+    if (keyboardCode === 107 || (keyboardCode === 187 && e.shiftKey === true)) {
+        chosenOperator = "add";
+        display.innerText = "0";
+    } else if (keyboardCode === 109 || keyboardCode === 189) {
+        chosenOperator = "subtract";
+        display.innerText = "0";
+    } else if (keyboardCode === 106 || (keyboardCode === 56 && e.shiftKey === true)) {
+        chosenOperator = "multiply";
+        display.innerText = "0";
+    } else if (keyboardCode === 111 || keyboardCode === 191) {
+        chosenOperator = "divide";
+        display.innerText = "0";
+    } else {
+        chosenOperator = chosenOperator;
+        display.innerText = display.innerText;
     }
-    display.innerText = "0";
     return chosenOperator;
 }
 
@@ -91,6 +78,14 @@ numberBtn.forEach(numberBtn => {
 
 //DISPLAY AND NUMBER VALUE LOGIC
 function updateDisplay(e) {
+
+    //STOPS THE USER FROM ADDING NUMBERS PAST THE DISPLAY BOX
+    if (display.innerText.length >11) {
+        numberBtn.forEach(numberBtn => {
+            numberBtn.removeEventListener("click", updateDisplay);
+        })
+    }
+
     if (display.innerText === 0) {
         display.innerText = "0";
     } else if (prev === 0 || chosenOperator === "") {
@@ -102,144 +97,126 @@ function updateDisplay(e) {
         display.innerText += e.target.innerText;
         curr = parseFloat(display.innerText);
     }
-    console.log(display.innerText, prev, chosenOperator, curr);
+    
+    console.log(display.innerText.length, prev, chosenOperator, curr);
 }
 
 //ADDING NUMBER AND DECIMAL KEYBOARD FUNCTIONALITY
 document.addEventListener("keydown", keyboardFunction);
 
 function keyboardFunction(e) {
-    switch(e.keyCode) {
-        case 110:
-        case 190:
-            decimalNumber();
-            break;
-        case 48:
-        case 96:
-            if (display.innerText === 0) {
-                display.innerText = "0";
-            } else if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText = "0";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "0";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 49:
-        case 97:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "1";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "1";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 50:
-        case 98:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "2";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "2";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 51:
-        case 99:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "3";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "3";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 52:
-        case 100:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "4";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "4";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 53:
-        case 101:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "5";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "5";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 54:
-        case 102:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "6";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "6";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 55:
-        case 103:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "7";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "7";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 56:
-        case 104:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "8";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "8";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        case 57:
-        case 105:
-            if (prev === 0 || chosenOperator === "") {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "9";
-                prev = parseFloat(display.innerText);
-            } else {
-                display.innerText = display.innerText.replace(/^0+/, '');
-                display.innerText += "9";
-                curr = parseFloat(display.innerText);
-            }
-            break;
-        default:
-            break;
+    let keyPress = String.fromCharCode(e.keyCode);
+
+    //STOPS THE USER FROM ADDING NUMBERS PAST THE DISPLAY BOX
+    if (display.innerText.length >12) {
+        document.removeEventListener("keydown", keyboardFunction);
     }
-    console.log(display.innerText, prev, chosenOperator, curr);
+
+    if (keyPress == 0) {
+        if (display.innerText === 0) {
+            display.innerText = "0";
+        } else if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText = "0";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "0";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 1) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "1";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "1";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 2) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "2";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "2";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 3) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "3";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "3";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 4) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "4";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "4";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 5) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "5";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "5";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 6) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "6";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "6";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 7) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "7";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "7";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 8 && e.shiftKey === false) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "8";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "8";
+            curr = parseFloat(display.innerText);
+        }
+    } else if (keyPress == 9) {
+        if (prev === 0 || chosenOperator === "") {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "9";
+            prev = parseFloat(display.innerText);
+        } else {
+            display.innerText = display.innerText.replace(/^0+/, '');
+            display.innerText += "9";
+            curr = parseFloat(display.innerText);
+        }
+    } else {
+        display.innerText = display.innerText;
+    }
     return display;
 }
 
@@ -250,7 +227,7 @@ decimalBtn.addEventListener("click", decimalNumber);
 function decimalNumber(e) {
     while(!display.innerText.includes(".")) {
         if(display.innerText === "") {
-            displayInput += 0;
+            display.innerText += 0;
         }
         display.innerText += e.target.innerText;
         if (prev === 0 || chosenOperator === "") {
@@ -258,6 +235,29 @@ function decimalNumber(e) {
         } else {
             curr = parseFloat(display);
         }
+    }
+}
+
+//DECIMAL BUTTON KEYBOARD SUPPORT
+document.addEventListener("keydown", decimalKeyboard);
+
+function decimalKeyboard (e) {
+    let keyboardCode = e.keyCode
+    if (keyboardCode === 110 || (keyboardCode === 190 && e.shiftKey === false)) {
+        while(!display.innerText.includes(".")) {
+            if(display.innerText === "") {
+                display.innerText += 0;
+            }
+            display.innerText += ".";
+            if (prev === 0 || chosenOperator === "") {
+                prev = parseFloat(display);
+            } else {
+                curr = parseFloat(display);
+            }
+        }
+    } else {
+        display.innerText = display.innerText;
+        return;
     }
 }
 
@@ -303,16 +303,15 @@ function equalsOperation() {
 document.addEventListener("keydown", equalsKeyboard);
 
 function equalsKeyboard(e){
-    const keyboardCode = e.keyCode
-    switch(keyboardCode) {
-        case 13:
-        case 187:
-            equalsOperation();
-            break;
+    let keyboardCode = e.keyCode
+    if (keyboardCode === 13 || keyboardCode === 187) {
+        equalsOperation();
+    } else {
+        return
     }
 }
 
-//CLEAR BUTTON FUNCTION AND LOGIC
+//CLEAR ALL BUTTON FUNCTION AND LOGIC
 const clear = document.querySelector(".clear");
 clear.addEventListener("click", clearHistory);
 
@@ -322,6 +321,19 @@ function clearHistory () {
     curr = 0;
     chosenOperator = "";
     console.log(display.innerText, prev, chosenOperator, curr);
+}
+
+//CLEAR ALL BUTTON KEYBOARD SUPPORT
+document.addEventListener("keydown", clearKeyboard);
+
+function clearKeyboard(e){
+    let keyboardCode = e.keyCode
+
+    if (keyboardCode === 67) {
+        clearHistory ();
+    } else {
+        return
+    }
 }
 
 //CORRECTION KEY
@@ -340,10 +352,10 @@ document.addEventListener("keydown", backSpaceKeyboard);
 
 function backSpaceKeyboard(e) {
     let keyboardCode = e.keyCode;
-    switch(keyboardCode) {
-        case 8:
-        case 46:
-            backSpace();
-            break;
+
+    if (keyboardCode === 8 || keyboardCode === 46) {
+        backSpace();
+    } else {
+        return;
     }
 }
