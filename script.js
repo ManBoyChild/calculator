@@ -5,6 +5,23 @@ let prev = 0;
 let curr = 0;
 let chosenOperator = "";
 
+//DISABLES OR ENABLES BUTTONS OF CALCULATOR
+function buttonCheck () {
+    //STOPS THE USER FROM ADDING NUMBERS PAST THE DISPLAY BOX
+    if (display.innerText.length >11) {
+        numberBtn.forEach(numberBtn => {
+            numberBtn.disabled = true;
+            document.removeEventListener ("keydown", keyboardFunction);
+        });
+    //ENABLES THE BUTTONS ONCE THERE IS ROOM IN THE DISPLAY
+    } else {
+        numberBtn.forEach(numberBtn => {
+            numberBtn.disabled = false;
+            document.addEventListener ("keydown", keyboardFunction);
+        });
+    }
+}
+
 //CALCULATOR FUNCTIONS
 const add = (prev, curr) => prev + curr;
 const subtract = (prev, curr) => prev - curr;
@@ -33,6 +50,7 @@ operatorFunctions.forEach(operator => {
     operator.addEventListener("click", updateOperator);
 });
 
+//UPDATES THE DISPLAY WITH BUTTON PRESS
 function updateOperator (e) {
     if (prev !== 0 && chosenOperator !== "" && curr !== 0) {
         equalsOperation();
@@ -42,6 +60,9 @@ function updateOperator (e) {
         chosenOperator = e.target.classList[0];
         display.innerText = "0";
     }
+    
+    buttonCheck();
+
     console.log(display.innerText, prev, chosenOperator, curr);
     return chosenOperator;
 }
@@ -49,6 +70,7 @@ function updateOperator (e) {
 //OPPERATOR AND EQUALS KEYBOARD FUNCTION
 document.addEventListener("keydown", operatorKeyboad);
 
+//UPDATES THE OPPERATION WITH KEYBOARD PRESS
 function operatorKeyboad(e) {
     let keyboardCode = e.keyCode;
     if (keyboardCode === 107 || (keyboardCode === 187 && e.shiftKey === true)) {
@@ -67,25 +89,21 @@ function operatorKeyboad(e) {
         chosenOperator = chosenOperator;
         display.innerText = display.innerText;
     }
+
+    buttonCheck();
+
     return chosenOperator;
 }
 
 //NUMBER BUTTON EVENT LISTENERS
 const numberBtn = document.querySelectorAll(".number");
+const testBtn = document.getElementsByClassName("number");
 numberBtn.forEach(numberBtn => {
     numberBtn.addEventListener("click", updateDisplay);
 });
 
 //DISPLAY AND NUMBER VALUE LOGIC
 function updateDisplay(e) {
-
-    //STOPS THE USER FROM ADDING NUMBERS PAST THE DISPLAY BOX
-    if (display.innerText.length >11) {
-        numberBtn.forEach(numberBtn => {
-            numberBtn.removeEventListener("click", updateDisplay);
-        })
-    }
-
     if (display.innerText === 0) {
         display.innerText = "0";
     } else if (prev === 0 || chosenOperator === "") {
@@ -97,6 +115,8 @@ function updateDisplay(e) {
         display.innerText += e.target.innerText;
         curr = parseFloat(display.innerText);
     }
+
+    buttonCheck();
     
     console.log(display.innerText.length, prev, chosenOperator, curr);
 }
@@ -104,14 +124,9 @@ function updateDisplay(e) {
 //ADDING NUMBER AND DECIMAL KEYBOARD FUNCTIONALITY
 document.addEventListener("keydown", keyboardFunction);
 
+//UPDATES NUMERIC DISPLAY VALUE WITH KEYBOARD NUMBERS
 function keyboardFunction(e) {
     let keyPress = String.fromCharCode(e.keyCode);
-
-    //STOPS THE USER FROM ADDING NUMBERS PAST THE DISPLAY BOX
-    if (display.innerText.length >12) {
-        document.removeEventListener("keydown", keyboardFunction);
-    }
-
     if (keyPress == 0) {
         if (display.innerText === 0) {
             display.innerText = "0";
@@ -217,6 +232,9 @@ function keyboardFunction(e) {
     } else {
         display.innerText = display.innerText;
     }
+
+    buttonCheck();
+
     return display;
 }
 
@@ -224,7 +242,9 @@ function keyboardFunction(e) {
 const decimalBtn = document.querySelector(".decimal");
 decimalBtn.addEventListener("click", decimalNumber);
 
+//UPDATES THE DISPLAY WITH DECIMAL BUTTON PRESS
 function decimalNumber(e) {
+
     while(!display.innerText.includes(".")) {
         if(display.innerText === "") {
             display.innerText += 0;
@@ -236,11 +256,15 @@ function decimalNumber(e) {
             curr = parseFloat(display);
         }
     }
+
+    buttonCheck();
+
 }
 
 //DECIMAL BUTTON KEYBOARD SUPPORT
 document.addEventListener("keydown", decimalKeyboard);
 
+//UPDATED THE DISPLAY WITH DECIMAL KEYBOARD PRESS
 function decimalKeyboard (e) {
     let keyboardCode = e.keyCode
     if (keyboardCode === 110 || (keyboardCode === 190 && e.shiftKey === false)) {
@@ -259,34 +283,35 @@ function decimalKeyboard (e) {
         display.innerText = display.innerText;
         return;
     }
+
+    buttonCheck();
+
 }
 
-//EQUALS BUTTON FUNCTION AND LOGIC
+//EQUALS BUTTON FUNCTION
 const equals = document.querySelector(".equals");
 equals.addEventListener("click", equalsOperation);
 
+//EQUALS BUTTON LOGIC
 function equalsOperation() {
     let equalsValue = 0;
+
+    //NEEDED FOR A LOOPHOLE TO TRY AND DIVIDE BY ZERO
     if (prev !== 0 && chosenOperator !== "" && curr === 0) {
         if (chosenOperator === "divide") {
             curr = 0;
         } else {
             curr = prev;
         }
-        equalsValue = operate(chosenOperator, prev, curr);
-        if (equalsValue > 99999999999 || equalsValue < -9999999999) {
-            equalsValue = equalsValue.toExponential(2);
-        } else {
-            equalsValue = parseFloat((equalsValue).toPrecision(12));
-        }
-    } else {
-        equalsValue = operate(chosenOperator, prev, curr);
-        if (equalsValue > 99999999999 || equalsValue < -9999999999) {
-            equalsValue = equalsValue.toExponential(2);
-        } else {
-            equalsValue = parseFloat((equalsValue).toPrecision(12));
-        }
     }
+
+        //CONTROLS THE DISPLAY OF THE OUTPUT
+        equalsValue = operate(chosenOperator, prev, curr);
+        if (equalsValue > 999999999999 || equalsValue < -99999999999) {
+            equalsValue = equalsValue.toExponential(2);
+        } else {
+            equalsValue = parseFloat((equalsValue).toPrecision(12));
+        }
 
     display.innerText = `${equalsValue}`;
 
@@ -295,6 +320,9 @@ function equalsOperation() {
         curr = 0;
         chosenOperator = "";
     }
+
+    buttonCheck();
+
     console.log(display.innerText, prev, chosenOperator, curr);
     return equalsValue;
 }
@@ -309,6 +337,9 @@ function equalsKeyboard(e){
     } else {
         return
     }
+
+    buttonCheck();
+
 }
 
 //CLEAR ALL BUTTON FUNCTION AND LOGIC
@@ -321,6 +352,9 @@ function clearHistory () {
     curr = 0;
     chosenOperator = "";
     console.log(display.innerText, prev, chosenOperator, curr);
+
+    buttonCheck();
+
 }
 
 //CLEAR ALL BUTTON KEYBOARD SUPPORT
@@ -334,6 +368,9 @@ function clearKeyboard(e){
     } else {
         return
     }
+
+    buttonCheck();
+
 }
 
 //CORRECTION KEY
@@ -345,6 +382,9 @@ function backSpace() {
     if (display.innerText.length === 0) {
         display.innerText = "0";
     }
+
+    buttonCheck();
+
 }
 
 //CORRECTION KEYBOARD SUPPORT
@@ -358,4 +398,7 @@ function backSpaceKeyboard(e) {
     } else {
         return;
     }
+
+    buttonCheck();
+
 }
