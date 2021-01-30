@@ -53,16 +53,15 @@ operatorFunctions.forEach(operator => {
 //UPDATES THE DISPLAY WITH BUTTON PRESS
 function updateOperator (e) {
     if (prev !== 0 && chosenOperator !== "" && curr !== 0) {
-        equalsOperation();
+        equalsOperationChain();
         chosenOperator = e.target.classList[0];
-        display.innerText = "0";
     } else {
         chosenOperator = e.target.classList[0];
-        display.innerText = "0";
     }
     
     buttonCheck();
 
+    console.log(prev, chosenOperator, curr);
     return chosenOperator;
 }
 
@@ -74,16 +73,12 @@ function operatorKeyboad(e) {
     let keyboardCode = e.keyCode;
     if (keyboardCode === 107 || (keyboardCode === 187 && e.shiftKey === true)) {
         chosenOperator = "add";
-        display.innerText = "0";
     } else if (keyboardCode === 109 || keyboardCode === 189) {
         chosenOperator = "subtract";
-        display.innerText = "0";
     } else if (keyboardCode === 106 || (keyboardCode === 56 && e.shiftKey === true)) {
         chosenOperator = "multiply";
-        display.innerText = "0";
     } else if (keyboardCode === 111 || keyboardCode === 191) {
         chosenOperator = "divide";
-        display.innerText = "0";
     } else {
         chosenOperator = chosenOperator;
         display.innerText = display.innerText;
@@ -103,6 +98,9 @@ numberBtn.forEach(numberBtn => {
 
 //DISPLAY AND NUMBER VALUE LOGIC
 function updateDisplay(e) {
+
+    valueReset();
+
     if (display.innerText === 0) {
         display.innerText = "0";
     } else if (prev === 0 || chosenOperator === "") {
@@ -115,8 +113,15 @@ function updateDisplay(e) {
         curr = parseFloat(display.innerText);
     }
 
+    console.log(prev, chosenOperator, curr);
     buttonCheck();
     
+}
+
+function valueReset() {
+    if (display.innerText.length > 0 && chosenOperator !== "" && curr === 0) {
+        display.innerText = "0"
+    }
 }
 
 //ADDING NUMBER AND DECIMAL KEYBOARD FUNCTIONALITY
@@ -130,7 +135,7 @@ function keyboardFunction(e) {
             display.innerText = "0";
         } else if (prev === 0 || chosenOperator === "") {
             display.innerText = display.innerText.replace(/^0+/, '');
-            display.innerText = "0";
+            display.innerText += "0";
             prev = parseFloat(display.innerText);
         } else {
             display.innerText = display.innerText.replace(/^0+/, '');
@@ -303,13 +308,13 @@ function equalsOperation() {
         }
     }
 
-        //CONTROLS THE DISPLAY OF THE OUTPUT
-        equalsValue = operate(chosenOperator, prev, curr);
-        if (equalsValue > 999999999999 || equalsValue < -99999999999) {
-            equalsValue = equalsValue.toExponential(2);
-        } else {
-            equalsValue = parseFloat((equalsValue).toPrecision(12));
-        }
+    //CONTROLS THE DISPLAY OF THE OUTPUT
+    equalsValue = operate(chosenOperator, prev, curr);
+    if (equalsValue > 999999999999 || equalsValue < -99999999999) {
+        equalsValue = equalsValue.toExponential(2);
+    } else {
+        equalsValue = parseFloat((equalsValue).toPrecision(12));
+    }
 
     display.innerText = `${equalsValue}`;
 
@@ -321,6 +326,43 @@ function equalsOperation() {
 
     buttonCheck();
 
+    console.log(prev, chosenOperator, curr);
+    return equalsValue;
+}
+
+//THIS EQUALS FUNCTION IS CALLED WHEN THE USER DOESN'T SELECT A SECOND OPERAND
+function equalsOperationChain() {
+    let equalsValue = 0;
+
+    //NEEDED FOR A LOOPHOLE TO TRY AND DIVIDE BY ZERO
+    if (prev !== 0 && chosenOperator !== "" && curr === 0) {
+        if (chosenOperator === "divide") {
+            curr = 0;
+        } else {
+            curr = prev;
+        }
+    }
+
+    //CONTROLS THE DISPLAY OF THE OUTPUT
+    equalsValue = operate(chosenOperator, prev, curr);
+    if (equalsValue > 999999999999 || equalsValue < -99999999999) {
+        equalsValue = equalsValue.toExponential(2);
+    } else {
+        equalsValue = parseFloat((equalsValue).toPrecision(12));
+    }
+
+    display.innerText = `${equalsValue}`;
+
+    //SETTING CURR = CURR ALLOWS FOR LOOPING
+    if (Number.isInteger(parseInt(curr))) {
+        prev = equalsValue;
+        curr = curr;
+        chosenOperator = "";
+    }
+
+    buttonCheck();
+
+    console.log(prev, chosenOperator, curr);
     return equalsValue;
 }
 
